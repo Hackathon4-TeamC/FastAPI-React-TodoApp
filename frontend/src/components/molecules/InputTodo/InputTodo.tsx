@@ -1,6 +1,5 @@
 import { Button, TextField } from "@mui/material"
 import { ChangeEventHandler, memo, VFC } from "react"
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined"
 import styles from "./InputTodo.module.scss"
 
 interface Props {

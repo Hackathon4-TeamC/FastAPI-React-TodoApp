@@ -1,16 +1,18 @@
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session, sessionmaker
 from starlette.requests import Request
 from pydantic import BaseModel
 from models import Todo
 from database import engine
 
+
 # DB接続用のセッションクラス インスタンスが作成されると接続する
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Pydanticを用いたAPIに渡されるデータの定義 ValidationやDocumentationの機能が追加される
 class TodoIn(BaseModel):
-    title: str
+    task: str
     isCompleted: bool
 
 # 単一のTodoを取得するためのユーティリティ
@@ -23,6 +25,19 @@ def get_db(request: Request):
 
 # このインスタンスをアノテーションに利用することでエンドポイントを定義できる
 app = FastAPI()
+
+# corsの設定
+origins = [
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Todoの全取得
 @app.get("/todos/")
@@ -39,7 +54,7 @@ def read_todo(todo_id: int, db: Session = Depends(get_db)):
 # Todoを登録
 @app.post("/todos/")
 async def create_todo(todo_in: TodoIn,  db: Session = Depends(get_db)):
-    todo = Todo(title=todo_in.title, isCompleted=False)
+    todo = Todo(task=todo_in.task, isCompleted=False)
     db.add(todo)
     db.commit()
     todo = get_todo(db, todo.id)
@@ -49,7 +64,7 @@ async def create_todo(todo_in: TodoIn,  db: Session = Depends(get_db)):
 @app.put("/todos/{todo_id}")
 async def update_todo(todo_id: int, todo_in: TodoIn, db: Session = Depends(get_db)):
     todo = get_todo(db, todo_id)
-    todo.title = todo_in.title
+    todo.task = todo_in.task
     todo.isCompleted = todo_in.isCompleted
     db.commit()
     todo = get_todo(db, todo_id)
