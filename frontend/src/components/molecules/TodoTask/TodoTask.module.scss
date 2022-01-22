@@ -1,0 +1,17 @@
+.taskWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  span {
+    font-size: large;
+    font-weight: bold;
+    margin-right: auto;
+    vertical-align: bottom;
+  }
+  .completed {
+    text-decoration: line-through 4px solid;
+  }
+  .btn {
+    height: 30px;
+  }
+}
