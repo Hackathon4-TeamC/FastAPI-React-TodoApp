@@ -21,7 +21,7 @@ def get_todo(db_session: Session, todo_id: int):
 
 # DB接続のセッションを各エンドポイントの関数に渡す
 def get_db(request: Request):
-    return request.state.db
+    return request.state.database
 
 # このインスタンスをアノテーションに利用することでエンドポイントを定義できる
 app = FastAPI()
@@ -41,46 +41,46 @@ app.add_middleware(
 
 # Todoの全取得
 @app.get("/todos/")
-def read_todos(db: Session = Depends(get_db)):
-    todos = db.query(Todo).all()
+def read_todos(database: Session = Depends(get_db)):
+    todos = database.query(Todo).all()
     return todos
 
 # 単一のTodoを取得
 @app.get("/todos/{todo_id}")
-def read_todo(todo_id: int, db: Session = Depends(get_db)):
-    todo = get_todo(db, todo_id)
+def read_todo(todo_id: int, database: Session = Depends(get_db)):
+    todo = get_todo(database, todo_id)
     return todo
 
 # Todoを登録
 @app.post("/todos/")
-async def create_todo(todo_in: TodoIn,  db: Session = Depends(get_db)):
+async def create_todo(todo_in: TodoIn,  database: Session = Depends(get_db)):
     todo = Todo(task=todo_in.task, isCompleted=False)
-    db.add(todo)
-    db.commit()
-    todo = get_todo(db, todo.id)
+    database.add(todo)
+    database.commit()
+    todo = get_todo(database, todo.id)
     return todo
 
 # Todoを更新
 @app.put("/todos/{todo_id}")
-async def update_todo(todo_id: int, todo_in: TodoIn, db: Session = Depends(get_db)):
-    todo = get_todo(db, todo_id)
+async def update_todo(todo_id: int, todo_in: TodoIn, database: Session = Depends(get_db)):
+    todo = get_todo(database, todo_id)
     todo.task = todo_in.task
     todo.isCompleted = todo_in.isCompleted
-    db.commit()
-    todo = get_todo(db, todo_id)
+    database.commit()
+    todo = get_todo(database, todo_id)
     return todo
 
 # Todoを削除
 @app.delete("/todos/{todo_id}")
-async def delete_todo(todo_id: int, db: Session = Depends(get_db)):
-    todo = get_todo(db, todo_id)
-    db.delete(todo)
-    db.commit()
+async def delete_todo(todo_id: int, database: Session = Depends(get_db)):
+    todo = get_todo(database, todo_id)
+    database.delete(todo)
+    database.commit()
 
 # リクエストの度に呼ばれるミドルウェア DB接続用のセッションインスタンスを作成
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
-    request.state.db = SessionLocal()
+    request.state.database = SessionLocal()
     response = await call_next(request)
-    request.state.db.close()
+    request.state.database.close()
     return response
