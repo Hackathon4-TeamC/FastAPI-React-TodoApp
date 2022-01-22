@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import { Todos } from "../Types/todo"
+import { Todos } from "../types/Todos"
 import {
   deleteTodos,
   getAllTodos,

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Todos } from "../Types/todo"
+import { Todos } from "../types/Todos"
 
 // todoを全件取得
 export const postTodo = async (inputTodo: string) => {

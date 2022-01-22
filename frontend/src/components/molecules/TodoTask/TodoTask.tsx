@@ -1,6 +1,6 @@
 import { Button } from "@mui/material"
-import { memo, VFC } from "react"
-import { Todos } from "../../../Types/todo"
+import { VFC } from "react"
+import { Todos } from "../../../types/Todos"
 import styles from "./TodoTask.module.scss"
 
 interface Props {
