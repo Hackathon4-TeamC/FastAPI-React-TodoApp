@@ -6,4 +6,3 @@ class Todo(Base):
     id = Column('id', Integer, primary_key = True)
     task = Column('task', String(200))
     isCompleted = Column('isCompleted', Boolean, default=False)
-

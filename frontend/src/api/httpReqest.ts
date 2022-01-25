@@ -4,7 +4,7 @@ import { Todos } from "../types/Todos"
 // todoを全件取得
 export const postTodo = async (inputTodo: string) => {
   try {
-    const result = await axios.post<Todos>("http://127.0.0.1:5000/todos/", {
+    const result = await axios.post<Todos>("http://0.0.0.0:8888/todos/", {
       task: inputTodo,
       isCompleted: false,
     })
@@ -19,7 +19,7 @@ export const postTodo = async (inputTodo: string) => {
 // todoを投稿
 export const getAllTodos = async () => {
   try {
-    const result = await axios.get<Todos[]>("http://127.0.0.1:5000/todos/")
+    const result = await axios.get<Todos[]>("http://0.0.0.0:8888/todos/")
     if (result) {
       return result.data
     }
@@ -31,7 +31,7 @@ export const getAllTodos = async () => {
 // todoを削除
 export const deleteTodos = async (id: number) => {
   try {
-    await axios.delete(`http://127.0.0.1:5000/todos/${id}`, {
+    await axios.delete(`http://0.0.0.0:8888/todos/${id}`, {
       data: {
         id: id,
       },
@@ -44,7 +44,7 @@ export const deleteTodos = async (id: number) => {
 export const putTodoIsCompleted = async (todo: Todos) => {
   try {
     const result = await axios.put<Todos>(
-      `http://127.0.0.1:5000/todos/${todo.id}`,
+      `http://0.0.0.0:8888/todos/${todo.id}`,
       {
         task: todo.task,
         isCompleted: (todo.isCompleted = !todo.isCompleted),

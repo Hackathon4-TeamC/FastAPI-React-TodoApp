@@ -1,0 +1,8 @@
+alembic
+fastapi
+# gunicorn
+mysqlclient
+pytest
+SQLAlchemy
+sqlalchemy_utils
+uvicorn
